@@ -1,15 +1,17 @@
 import React from "./react";
 import { render } from "./react-dom";
 
-render(<div>Hello World!!</div>, document.getElementById("app"));
+const Hello = () => {
+  return <div>Hello World!!</div>;
+};
 
-// 可在 https://babeljs.io/repl 查看上述 jsx 的等效代码
-// 两个目标，实现 React.createElement & ReactDOM.render
+render(<Hello />, document.getElementById("app"));
+
 // import React from "./react";
 // import { render } from "./react-dom";
 
-// render(React.createElement(
-//   "div",
-//   null,
-//   "Hello World!!"
-// ), document.getElementById("app"));
+// const Hello = () => {
+//   return React.createElement("div", null, "Hello World!!");
+// };
+
+// render(React.createElement(Hello, null), document.getElementById("app"));
