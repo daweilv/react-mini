@@ -5,12 +5,7 @@ class HelloWorld extends Component {
   render() {
     return (
       <div className="HelloWorld">
-        <Hello
-          style={{ background: "grey" }}
-          onClick={() => {
-            alert("clicked!");
-          }}
-        />
+        <Hello style={{ background: "grey" }} />
         <h3 className="World" style={{ color: "red" }}>
           The Wonderful World!
         </h3>
@@ -19,12 +14,26 @@ class HelloWorld extends Component {
   }
 }
 
-const Hello = ({ style, onClick }) => {
-  return (
-    <h1 className="Hello" style={style} onClick={onClick}>
-      Hello!! Click me!
-    </h1>
-  );
-};
+class Hello extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 };
+  }
+
+  render() {
+    const { style } = this.props;
+    return (
+      <h1
+        className="Hello"
+        style={style}
+        onClick={() => {
+          this.setState({ count: ++this.state.count });
+        }}
+      >
+        Hello!! Click me {this.state.count} times
+      </h1>
+    );
+  }
+}
 
 render(<HelloWorld />, document.getElementById("app"));
