@@ -16,8 +16,7 @@ npm run-script dev
 npm run-script prod
 ```
 
-1.  [Step1](https://github.com/daweilv/Hello-React/tree/step1)
-    最简单的 DOM 元素节点
+### 渲染最简单的 DOM 元素组件 [Step1](https://github.com/daweilv/Hello-React/tree/step1)
 
 ```jsx
 import React from "./react";
@@ -28,8 +27,7 @@ render(<div>Hello World!!</div>, document.getElementById("app"));
 
 实现 React.createElement & ReactDOM.render
 
-2.  [Step2](https://github.com/daweilv/Hello-React/tree/step2)
-    支持 stateless functional component
+### 渲染 stateless component [Step2](https://github.com/daweilv/Hello-React/tree/step2)
 
 ```jsx
 import React from "./react";
@@ -44,8 +42,7 @@ render(<Hello />, document.getElementById("app"));
 
 > 目前遇到的难点在于如何将所有的 html tag 都枚举出来，img 节点的处理肯定是和 div/a/video 节点的不一样，节点的合法性属性校验也是一个大工程。
 
-3.  [Step3](https://github.com/daweilv/Hello-React/tree/step3)
-    支持 class component
+### 渲染 class component [Step3](https://github.com/daweilv/Hello-React/tree/step3)
 
 > 在看分析 React 元素的时候发现一个 `$$typeof` 的节点，值为 `Symbol(react.element)`，好奇这是干啥的呢？一顿寻找，发现原因是为了防止 xss，用于验证节点是否是 React 自己生成的。
 > [How Much XSS Vulnerability Protection is React Responsible For? #3473](https://github.com/facebook/react/issues/3473)
@@ -93,8 +90,7 @@ const Hello = () => {
 render(<World />, document.getElementById("app"));
 ```
 
-4.  [Step4](https://github.com/daweilv/Hello-React/tree/step4)
-    应用 component 上的 props 到 dom 上。
+### 支持 props [Step4](https://github.com/daweilv/Hello-React/tree/step4)
 
 ```js
 import React, { Component } from "./react";
@@ -129,8 +125,7 @@ const Hello = ({ style, onClick }) => {
 render(<HelloWorld />, document.getElementById("app"));
 ```
 
-5.  [Step5](https://github.com/daweilv/Hello-React/tree/step5)
-    实现同步的 "setState"
+### 支持同步的 setState [Step5](https://github.com/daweilv/Hello-React/tree/step5)
 
 ```js
 import React, { Component } from "./react";
@@ -174,54 +169,229 @@ class Hello extends Component {
 render(<HelloWorld />, document.getElementById("app"));
 ```
 
-6.  [Step6](https://github.com/daweilv/Hello-React/tree/step6)
-    实现生命周期（旧版 react v16.2-）
+### 实现大部分生命周期(react v16.2-) [Step6](https://github.com/daweilv/Hello-React/tree/step6)
 
-    - [x] componentWillMount
-    - [x] componentDidMount
-    - [x] componentWillReciveProps
-    - [x] shouldComponentUpdate
-    - [x] componentWillUpdate
-    - [x] componentDidUpdate
-    - [ ] coponentWillUnmount
+- [x] componentWillMount
+- [x] componentDidMount
+- [x] componentWillReciveProps
+- [x] shouldComponentUpdate
+- [x] componentWillUpdate
+- [x] componentDidUpdate
+- [ ] coponentWillUnmount
 
-    1.  挂载阶段
-        组件的挂载是在 dom append 到 root container 上的一刻完成挂载，组件的 cdm 需要从子组件开始，需要一个队列来先进先出 invoke。
-        写到这里，我们开始迫切地需要一个“全局”的对象，来保存我们一些上下文变量，但我们不希望污染真正的对象。于是我们创建了一个立即执行函数（闭包）。
+1.  挂载阶段
+    组件的挂载是在 dom append 到 root container 上的一刻完成挂载，组件的 cdm 需要从子组件开始，需要一个队列来先进先出 invoke。
+    写到这里，我们开始迫切地需要一个“全局”的对象，来保存我们一些上下文变量，但我们不希望污染真正的对象。于是我们创建了一个立即执行函数（闭包）。
 
-        ```
-        parent:constructor invoked
-        parent:componentWillMount invoked
-        parent:render invoked
-        child1:constructor invoked
-        child1:componentWillMount invoked
-        child1:render invoked
-        child2:constructor invoked
-        child2:componentWillMount invoked
-        child2:render invoked
-        child1:componentDidMount invoked
-        child2:componentDidMount invoked
-        parent:componentDidMount invoked
-        ```
+```
+parent:constructor invoked
+parent:componentWillMount invoked
+parent:render invoked
+child1:constructor invoked
+child1:componentWillMount invoked
+child1:render invoked
+child2:constructor invoked
+child2:componentWillMount invoked
+child2:render invoked
+child1:componentDidMount invoked
+child2:componentDidMount invoked
+parent:componentDidMount invoked
+```
 
-    2.  更新阶段 红色部分我们将在后面优化掉
-        红色部分
+2.  更新阶段（红色部分我们将在后面优化掉）
 
-        ```diff
-          parent:shouldComponentUpdate invoked
-          parent:componentWillUpdate invoked
-          parent:render invoked
-        - child1:constructor invoked
-          child1:componentWillReceiveProps invoked
-          child1:shouldComponentUpdate invoked
-          child1:componentWillUpdate invoked
-          child1:render invoked
-        - child2:constructor invoked
-          child2:componentWillReceiveProps invoked
-          child2:shouldComponentUpdate invoked
-          child2:componentWillUpdate invoked
-          child2:render invoked
-          child1:componentDidUpdate invoked
-          child2:componentDidUpdate invoked
-          parent:componentDidUpdate invoked
-        ```
+```diff
+  parent:shouldComponentUpdate invoked
+  parent:componentWillUpdate invoked
+  parent:render invoked
+- child1:constructor invoked
+  child1:componentWillReceiveProps invoked
+  child1:shouldComponentUpdate invoked
+  child1:componentWillUpdate invoked
+  child1:render invoked
+- child2:constructor invoked
+  child2:componentWillReceiveProps invoked
+  child2:shouldComponentUpdate invoked
+  child2:componentWillUpdate invoked
+  child2:render invoked
+  child1:componentDidUpdate invoked
+  child2:componentDidUpdate invoked
+  parent:componentDidUpdate invoked
+```
+
+```js
+import React, { Component } from "./react";
+import { render } from "./react-dom";
+
+class Root extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      flag: true
+    };
+  }
+
+  render() {
+    const { flag } = this.state;
+    if (!flag) return null;
+    return (
+      <div
+        style={{ backgroundColor: "grey", padding: "30px" }}
+        onClick={() => {
+          this.setState({
+            flag: false
+          });
+        }}
+      >
+        <Parent />
+      </div>
+    );
+  }
+}
+
+class Parent extends Component {
+  constructor(props) {
+    super(props);
+    console.log("parent:constructor invoked");
+    this.state = {
+      child1Style: { color: "green" },
+      child2Style: { color: "red" }
+    };
+  }
+
+  componentWillMount() {
+    console.log("parent:componentWillMount invoked");
+  }
+
+  componentDidMount() {
+    console.log("parent:componentDidMount invoked");
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("parent:componentWillReceiveProps invoked");
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("parent:shouldComponentUpdate invoked");
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("parent:componentWillUpdate invoked");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("parent:componentDidUpdate invoked");
+  }
+
+  componentWillUnmount() {
+    console.log("parent:componentWillUnmount invoked");
+  }
+
+  render() {
+    console.log("parent:render invoked");
+    return (
+      <div
+        className="parent"
+        style={{ backgroundColor: "#3c3c3c" }}
+        onClick={e => {
+          e.stopPropagation();
+          this.setState({
+            child1Style: { color: "yellow" },
+            child2Style: { color: "blue" }
+          });
+        }}
+      >
+        <Child1 style={this.state.child1Style} />
+        <Child2 style={this.state.child2Style} />
+      </div>
+    );
+  }
+}
+
+class Child1 extends Component {
+  constructor(props) {
+    super(props);
+    console.log("child1:constructor invoked");
+  }
+
+  componentWillMount() {
+    console.log("child1:componentWillMount invoked");
+  }
+
+  componentDidMount() {
+    console.log("child1:componentDidMount invoked");
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("child1:componentWillReceiveProps invoked");
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("child1:shouldComponentUpdate invoked");
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("child1:componentWillUpdate invoked");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("child1:componentDidUpdate invoked");
+  }
+
+  componentWillUnmount() {
+    console.log("child1:componentWillUnmount invoked");
+  }
+
+  render() {
+    console.log("child1:render invoked");
+    const { style } = this.props;
+    return <div style={style}>child1</div>;
+  }
+}
+
+class Child2 extends Component {
+  constructor(props) {
+    super(props);
+    console.log("child2:constructor invoked");
+  }
+
+  componentWillMount() {
+    console.log("child2:componentWillMount invoked");
+  }
+
+  componentDidMount() {
+    console.log("child2:componentDidMount invoked");
+  }
+
+  componentWillReceiveProps(nextProps) {
+    console.log("child2:componentWillReceiveProps invoked");
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("child2:shouldComponentUpdate invoked");
+    return true;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    console.log("child2:componentWillUpdate invoked");
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    console.log("child2:componentDidUpdate invoked");
+  }
+
+  componentWillUnmount() {
+    console.log("child2:componentWillUnmount invoked");
+  }
+
+  render() {
+    console.log("child2:render invoked");
+    const { style } = this.props;
+    return <div style={style}>child2</div>;
+  }
+}
+
+render(<Root />, document.getElementById("app"));
+```
