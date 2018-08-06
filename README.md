@@ -179,8 +179,8 @@ render(<HelloWorld />, document.getElementById("app"));
 
 #### 1. 挂载阶段
 
-    组件的挂载是在 dom append 到 root container 上的一刻完成挂载，组件的 cdm 需要从子组件开始，需要一个队列来先进先出 invoke。
-    写到这里，我们开始迫切地需要一个“全局”的对象，来保存我们一些上下文变量，但我们不希望污染真正的对象。于是我们创建了一个立即执行函数（闭包）。
+组件的挂载是在 dom append 到 root container 上的一刻完成挂载，组件的 cdm 需要从子组件开始，需要一个队列来先进先出 invoke。
+写到这里，我们开始迫切地需要一个“全局”的对象，来保存我们一些上下文变量，但我们不希望污染真正的对象。于是我们创建了一个立即执行函数（闭包）。
 
 ```
 parent:constructor invoked
@@ -197,7 +197,9 @@ child2:componentDidMount invoked
 parent:componentDidMount invoked
 ```
 
-#### 2. 更新阶段（红色部分我们将在后面优化掉）
+#### 2. 更新阶段
+
+红色部分我们将在后面优化掉
 
 ```diff
   parent:shouldComponentUpdate invoked
