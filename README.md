@@ -199,7 +199,7 @@ parent:componentDidMount invoked
 
 #### 2. 更新阶段
 
-红色部分我们将在后面优化掉
+红色部分与 React 生命周期不一致，我们将在后面优化掉
 
 ```diff
   parent:shouldComponentUpdate invoked
