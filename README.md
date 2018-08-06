@@ -173,3 +173,79 @@ class Hello extends Component {
 
 render(<HelloWorld />, document.getElementById("app"));
 ```
+
+6.  [Step6](https://github.com/daweilv/Hello-React/tree/step6)
+    实现生命周期（旧版 react v16.2-）
+
+    - [x] componentWillMount
+    - [x] componentDidMount
+    - [x] componentWillReciveProps
+    - [x] shouldComponentUpdate
+    - [x] componentWillUpdate
+    - [x] componentDidUpdate
+    - [x] coponentWillUnmount
+
+    1.  挂载阶段
+        组件的挂载是在 dom append 到 root container 上的一刻完成挂载，组件的 cdm 需要从子组件开始，需要一个队列来先进先出 invoke。
+        写到这里，我们开始迫切地需要一个“全局”的对象，来保存我们一些上下文变量，但我们不希望污染真正的对象。于是我们创建了一个立即执行函数（闭包）。
+
+        ```
+        parent:constructor invoked
+        parent:componentWillMount invoked
+        parent:render invoked
+        child1:constructor invoked
+        child1:componentWillMount invoked
+        child1:render invoked
+        child2:constructor invoked
+        child2:componentWillMount invoked
+        child2:render invoked
+        child1:componentDidMount invoked
+        child2:componentDidMount invoked
+        parent:componentDidMount invoked
+        ```
+
+    2.  更新阶段
+
+
+        ```
+        parent:shouldComponentUpdate invoked
+        parent:componentWillUpdate invoked
+        parent:render invoked
+        child1:componentWillReceiveProps invoked
+        child1:shouldComponentUpdate invoked
+        child1:componentWillUpdate invoked
+        child1:render invoked
+        child2:componentWillReceiveProps invoked
+        child2:shouldComponentUpdate invoked
+        child2:componentWillUpdate invoked
+        child2:render invoked
+        child1:componentDidUpdate invoked
+        child2:componentDidUpdate invoked
+        parent:componentDidUpdate invoked
+        ```
+
+        ```diff
+        parent:render invoked
+        + child1:constructor invoked
+        child1:componentWillReceiveProps invoked
+        child1:shouldComponentUpdate invoked
+        child1:componentWillUpdate invoked
+        child1:render invoked
+        + child2:constructor invoked
+        child2:componentWillReceiveProps invoked
+        child2:shouldComponentUpdate invoked
+        child2:componentWillUpdate invoked
+        child2:render invoked
+        child1:componentDidUpdate invoked
+        child2:componentDidUpdate invoked
+        parent:componentDidUpdate invoked
+        ```
+
+    3.  卸载阶段
+
+
+        ```
+        parent:componentWillUnmount invoked
+        child1:componentWillUnmount invoked
+        child2:componentWillUnmount invoked
+        ```
