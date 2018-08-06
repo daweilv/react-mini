@@ -183,7 +183,7 @@ render(<HelloWorld />, document.getElementById("app"));
     - [x] shouldComponentUpdate
     - [x] componentWillUpdate
     - [x] componentDidUpdate
-    - [x] coponentWillUnmount
+    - [ ] coponentWillUnmount
 
     1.  挂载阶段
         组件的挂载是在 dom append 到 root container 上的一刻完成挂载，组件的 cdm 需要从子组件开始，需要一个队列来先进先出 invoke。
@@ -204,48 +204,24 @@ render(<HelloWorld />, document.getElementById("app"));
         parent:componentDidMount invoked
         ```
 
-    2.  更新阶段
-
-
-        ```
-        parent:shouldComponentUpdate invoked
-        parent:componentWillUpdate invoked
-        parent:render invoked
-        child1:componentWillReceiveProps invoked
-        child1:shouldComponentUpdate invoked
-        child1:componentWillUpdate invoked
-        child1:render invoked
-        child2:componentWillReceiveProps invoked
-        child2:shouldComponentUpdate invoked
-        child2:componentWillUpdate invoked
-        child2:render invoked
-        child1:componentDidUpdate invoked
-        child2:componentDidUpdate invoked
-        parent:componentDidUpdate invoked
-        ```
+    2.  更新阶段 红色部分我们将在后面优化掉
+        红色部分
 
         ```diff
-        parent:render invoked
-        + child1:constructor invoked
-        child1:componentWillReceiveProps invoked
-        child1:shouldComponentUpdate invoked
-        child1:componentWillUpdate invoked
-        child1:render invoked
-        + child2:constructor invoked
-        child2:componentWillReceiveProps invoked
-        child2:shouldComponentUpdate invoked
-        child2:componentWillUpdate invoked
-        child2:render invoked
-        child1:componentDidUpdate invoked
-        child2:componentDidUpdate invoked
-        parent:componentDidUpdate invoked
-        ```
-
-    3.  卸载阶段
-
-
-        ```
-        parent:componentWillUnmount invoked
-        child1:componentWillUnmount invoked
-        child2:componentWillUnmount invoked
+          parent:shouldComponentUpdate invoked
+          parent:componentWillUpdate invoked
+          parent:render invoked
+        - child1:constructor invoked
+          child1:componentWillReceiveProps invoked
+          child1:shouldComponentUpdate invoked
+          child1:componentWillUpdate invoked
+          child1:render invoked
+        - child2:constructor invoked
+          child2:componentWillReceiveProps invoked
+          child2:shouldComponentUpdate invoked
+          child2:componentWillUpdate invoked
+          child2:render invoked
+          child1:componentDidUpdate invoked
+          child2:componentDidUpdate invoked
+          parent:componentDidUpdate invoked
         ```
