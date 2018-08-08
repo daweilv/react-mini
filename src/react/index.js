@@ -1,9 +1,5 @@
-import createVNode from "./createVNode";
 import Component from "./Component";
-
-function createElement(type, attrs, ...children) {
-  return createVNode(type, attrs, children);
-}
+import createElement from "./createElement";
 
 const React = {
   createElement,
