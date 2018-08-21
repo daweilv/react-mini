@@ -220,6 +220,11 @@ parent:componentDidMount invoked
   parent:componentDidUpdate invoked
 ```
 
+<details>
+<summary>
+code
+</summary>
+
 ```js
 import React, { Component } from "./react";
 import { render } from "./react-dom";
@@ -396,3 +401,5 @@ class Child2 extends Component {
 
 render(<Root />, document.getElementById("app"));
 ```
+
+</details>
